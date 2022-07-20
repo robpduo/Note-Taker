@@ -1,7 +1,7 @@
 const router = require('express').Router();
 
-router.get('/notes', (req, res) => {
-    
+router.post('/notes', (req, res) => {
+    console.log("api/notes found");
 });
 
 module.exports = router;
