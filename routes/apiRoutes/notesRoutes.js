@@ -1,27 +1,24 @@
 const router = require('express').Router();
-const { createNewNote, deleteNote } = require('../../lib/notes');
-const { notes } = require('../../data/notes.json');
+const { createNewNote, deleteNote, readNote } = require('../../lib/notes');
+const path = require('path');
 
 // read from file, send as a response on get request
 router.get('/notes', (req, res) => {
-    res.json(notes);
+    res.sendFile(path.join(__dirname, "../../db/db.json"));
 });
 
 /* Writes the new note to file */
 router.post('/notes', (req, res) => {
-    req.body.id = notes.length.toString();
-
+    let notes = readNote();
+    req.body.id = `${Math.floor(Math.random() * 10000)}`;
     const note = createNewNote(req.body, notes);
     res.json(note);
 });
 
-
 router.delete('/notes/:id', (req, res) => {
-    deleteNote(req.params.id, notes);
+    let notes = readNote();
+    const newList = deleteNote(req.params.id, notes);
+    res.json(newList);
 }); 
-
-router.get('/notes/:id', (req, res) => {
-    res.json(notes);
-});
 
 module.exports = router;
